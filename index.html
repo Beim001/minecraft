@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aminoac Town - Newnan Town Server</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* 自定义Minecraft字体 */
+        @font-face {
+            font-family: 'Minecraft';
+            src: url('https://assets.codepen.io/4175254/Minecraft.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Minecraft';
+            src: url('https://assets.codepen.io/4175254/Minecraft-Bold.woff') format('woff');
+            font-weight: bold;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Minecraft';
+            src: url('https://assets.codepen.io/4175254/Minecraft-Italic.woff') format('woff');
+            font-weight: normal;
+            font-style: italic;
+        }
+        @font-face {
+            font-family: 'Minecraft';
+            src: url('https://assets.codepen.io/4175254/Minecraft-BoldItalic.woff') format('woff');
+            font-weight: bold;
+            font-style: italic;
+        }
+        
+        /* 添加支持中文的像素字体 */
+        @font-face {
+            font-family: 'PixelFont';
+            src: url('https://cdn.jsdelivr.net/gh/TakWolf/ark-pixel-font@gh-pages/fonts/ark-pixel-font-10px-monospaced-zh_cn.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --mc-green: #4caf50;
+            --mc-dark-green: #388e3c;
+            --mc-brown: #8d6e63;
+            --mc-dark-brown: #5d4037;
+            --mc-light: #f5f5f5;
+            --mc-dark: #212121;
+            --mc-dirt: #7d5c3c;
+            --mc-grass: #4a7c4a;
+            --mc-stone: #8f8f8f;
+            --mc-water: #3e57a8;
+            --mc-gold: #f9c22b;
+            --mc-creeper: #65a844;
+            --mc-diamond: #3e9eff;
+            --mc-redstone: #f44336;
+            --mc-obsidian: #2e2a5d;
+            --mc-nether: #704e3e;
+        }
+
+        body {
+            background: #1a1a1a url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23222" /><rect x="0" y="0" width="10" height="10" fill="%23333" /><rect x="20" y="0" width="10" height="10" fill="%23333" /><rect x="40" y="0" width="10" height="10" fill="%23333" /><rect x="60" y="0" width="10" height="10" fill="%23333" /><rect x="80" y="0" width="10" height="10" fill="%23333" /><rect x="10" y="10" width="10" height="10" fill="%23333" /><rect x="30" y="10" width="10" height="10" fill="%23333" /><rect x="50" y="10" width="10" height="10" fill="%23333" /><rect x="70" y="10" width="10" height="10" fill="%23333" /><rect x="90" y="10" width="10" height="10" fill="%23333" /></svg>');
+            color: var(--mc-light);
+            overflow-x: hidden;
+            font-family: 'Minecraft', 'Press Start 2P', 'PixelFont', sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            image-rendering: pixelated;
+            text-shadow: 1px 1px 0 #000;
+            opacity: 0;
+            animation: fadeIn 1s ease-in forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Minecraft', 'Press Start 2P', 'PixelFont', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        /* Minecraft 风格按钮 */
+        .mc-button {
+            display: inline-block;
+            background: var(--mc-green);
+            color: white;
+            padding: 12px 24px;
+            margin: 10px;
+            border: 2px solid var(--mc-dark-green);
+            border-radius: 0;
+            text-decoration: none;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 0 var(--mc-dark-green);
+            font-family: 'Minecraft', 'Press Start 2P', 'PixelFont', sans-serif;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        .mc-button:hover {
+            background: var(--mc-dark-green);
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 var(--mc-dark-green);
+        }
+
+        .mc-button:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        .mc-button.brown {
+            background: var(--mc-brown);
+            border-color: var(--mc-dark-brown);
+            box-shadow: 0 4px 0 var(--mc-dark-brown);
+        }
+
+        .mc-button.brown:hover {
+            background: var(--mc-dark-brown);
+            box-shadow: 0 2px 0 var(--mc-dark-brown);
+        }
+
+        .mc-button.gold {
+            background: var(--mc-gold);
+            border-color: #d4a017;
+            box-shadow: 0 4px 0 #d4a017;
+            color: #000;
+        }
+
+        .mc-button.gold:hover {
+            background: #d4a017;
+            box-shadow: 0 2px 0 #d4a017;
+        }
+
+        .mc-button.creeper {
+            background: var(--mc-creeper);
+            border-color: #508a3c;
+            box-shadow: 0 4px 0 #508a3c;
+        }
+
+        .mc-button.creeper:hover {
+            background: #508a3c;
+            box-shadow: 0 2px 0 #508a3c;
+        }
+        
+        .mc-button.diamond {
+            background: var(--mc-diamond);
+            border-color: #2a6ebd;
+            box-shadow: 0 4px 0 #2a6ebd;
+        }
+        
+        .mc-button.diamond:hover {
+            background: #2a6ebd;
+            box-shadow: 0 2px 0 #2a6ebd;
+        }
+
+        /* 像素化元素 */
+        .pixel-border {
+            border: 4px solid var(--mc-dark);
+            border-image: repeating-linear-gradient(45deg, var(--mc-dark), var(--mc-dark) 2px, #333 2px, #333 4px) 10;
+            position: relative;
+        }
+
+        .pixel-border::before {
+            content: "";
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            pointer-events: none;
+        }
+        
+        /* 方块纹理 */
+        .block-texture {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .block-texture::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(45deg, rgba(0,0,0,0.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.1) 75%),
+                linear-gradient(45deg, rgba(0,0,0,0.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.1) 75%);
+            background-size: 10px 10px;
+            background-position: 0 0, 5px 5px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* 头部样式 */
+        header {
+            background-color: rgba(33, 33, 33, 0.95);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 4px solid var(--mc-green);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            transform: translateY(-20px);
+            opacity: 0;
+            animation: slideDown 0.8s ease-out 0.3s forwards;
+        }
+
+        @keyframes slideDown {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .creeper-face {
+            width: 60px;
+            height: 60px;
+            background: #65a844;
+            position: relative;
+            margin-right: 15px;
+            border: 2px solid #000;
+            transition: all 0.3s ease;
+            transform: scale(0);
+            animation: scaleIn 0.5s ease-out 0.5s forwards;
+        }
+
+        @keyframes scaleIn {
+            to { transform: scale(1); }
+        }
+
+        .creeper-face::before, .creeper-face::after {
+            content: "";
+            position: absolute;
+            background: #000;
+        }
+
+        .creeper-face::before {
+            top: 12px;
+            left: 12px;
+            width: 12px;
+            height: 12px;
+        }
+
+        .creeper-face::after {
+            top: 12px;
+            right: 12px;
+            width: 12px;
+            height: 12px;
+        }
+
+        .creeper-face .mouth {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            width: 30px;
+            height: 15px;
+            background: #000;
+        }
+
+        .logo-text {
+            font-size: 22px;
+            color: var(--mc-green);
+            text-shadow: 2px 2px 0 var(--mc-dark-green);
+            letter-spacing: 1px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.7s forwards;
+        }
+
+        .logo-text span {
+            color: var(--mc-light);
+            font-size: 16px;
+            display: block;
+            text-shadow: none;
+            margin-top: 5px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            align-items: center;
+        }
+
+        nav ul li {
+            margin: 0 8px;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeUp 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        nav ul li:nth-child(1) { animation-delay: 0.8s; }
+        nav ul li:nth-child(2) { animation-delay: 0.9s; }
+        nav ul li:nth-child(3) { animation-delay: 1.0s; }
+        nav ul li:nth-child(4) { animation-delay: 1.1s; }
+        nav ul li:nth-child(5) { animation-delay: 1.2s; }
+        nav ul li:nth-child(6) { animation-delay: 1.3s; }
+
+        nav ul li a {
+            color: var(--mc-light);
+            text-decoration: none;
+            padding: 10px 15px;
+            position: relative;
+            transition: color 0.3s;
+            font-size: 14px;
+        }
+
+        nav ul li a:hover {
+            color: var(--mc-green);
+        }
+
+        nav ul li a::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--mc-green);
+            transition: width 0.3s;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+        
+        .lang-switcher {
+            display: flex;
+            gap: 8px;
+            margin-left: 15px;
+        }
+        
+        .lang-btn {
+            width: 40px;
+            height: 25px;
+            background: #444;
+            border: 2px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 12px;
+        }
+        
+        .lang-btn.active {
+            background: var(--mc-green);
+            border-color: var(--mc-dark-green);
+        }
+        
+        .lang-btn:hover {
+            background: #555;
+        }
+
+        /* 英雄区域 */
+        .hero {
+            height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            padding: 0 20px;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), 
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><rect width="800" height="600" fill="%233a5c3a"/><rect x="0" y="400" width="800" height="200" fill="%237d5c3c"/><rect x="100" y="300" width="60" height="100" fill="%238d6e63"/><rect x="110" y="200" width="40" height="100" fill="%238d6e63"/><rect x="120" y="150" width="20" height="50" fill="%238d6e63"/><rect x="300" y="350" width="80" height="50" fill="%235d4037"/><rect x="320" y="300" width="40" height="50" fill="%235d4037"/><rect x="500" y="320" width="70" height="80" fill="%235d4037"/><rect x="520" y="280" width="30" height="40" fill="%235d4037"/></svg>');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            z-index: 2;
+            transform: translateY(30px);
+            opacity: 0;
+            animation: slideUpFadeIn 1s ease-out 0.5s forwards;
+        }
+
+        @keyframes slideUpFadeIn {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: white;
+            text-shadow: 3px 3px 0 var(--mc-dark);
+            line-height: 1.3;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+            color: #e0e0e0;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        .mc-grass-block {
+            display: inline-block;
+            width: 200px;
+            height: 20px;
+            background: 
+                linear-gradient(45deg, var(--mc-grass) 25%, transparent 25%, transparent 75%, var(--mc-grass) 75%),
+                linear-gradient(45deg, var(--mc-grass) 25%, var(--mc-dark-green) 25%, var(--mc-dark-green) 75%, var(--mc-grass) 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            margin: 20px 0;
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: growIn 1.2s ease-out 1s forwards;
+        }
+
+        @keyframes growIn {
+            to { transform: scaleX(1); }
+        }
+
+        /* 区域样式 */
+        .section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.3rem;
+            margin-bottom: 50px;
+            color: var(--mc-green);
+            text-shadow: 2px 2px 0 var(--mc-dark);
+            position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.8s ease-out forwards;
+        }
+
+        .section-title::after {
+            content: "";
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: var(--mc-green);
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+        
+        .section-title .block-icon {
+            display: inline-block;
+            margin: 0 15px;
+            position: relative;
+            top: 5px;
+        }
+        
+        /* 老式吊灯样式 */
+        .ceiling-lamp {
+            position: absolute;
+            top: -70px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            text-align: center;
+            width: 150px;
+            height: 150px;
+        }
+        
+        .ceiling-hook {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 10px;
+            background: #888;
+            border-radius: 50%;
+            z-index: 11;
+        }
+        
+        .lamp-rope {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100px;
+            background: #8d6e63;
+            transform-origin: top center;
+            cursor: grab;
+            z-index: 10;
+        }
+        
+        .lamp-rope.grabbing {
+            cursor: grabbing;
+        }
+        
+        .minecraft-lamp {
+            position: absolute;
+            top: 110px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            background: #888;
+            border: 2px solid #555;
+            border-radius: 50%;
+            transition: all 0.3s;
+            z-index: 10;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .minecraft-lamp.on {
+            background: #ffdd55;
+            box-shadow: 0 0 20px #ffdd55, 0 0 40px #ffaa00;
+        }
+        
+        .minecraft-lever {
+            position: absolute;
+            top: -20px;
+            right: 10px;
+            width: 16px;
+            height: 40px;
+            background: #8d6e63;
+            border: 2px solid #5d4037;
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+            transform-origin: top center;
+            z-index: 10;
+        }
+        
+        .minecraft-lever.active {
+            transform: rotate(30deg);
+        }
+
+        /* 关于小镇 - 使用Roboto Slab字体 */
+        .about-content {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .about-text {
+            flex: 1;
+            min-width: 300px;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: fadeRightIn 0.8s ease-out 0.5s forwards;
+            font-family: 'Roboto Slab', serif;
+        }
+
+        @keyframes fadeRightIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .about-text p {
+            margin-bottom: 25px;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        .about-image {
+            flex: 1;
+            min-width: 300px;
+            height: 400px;
+            background: 
+                linear-gradient(45deg, #8d6e63 25%, transparent 25%, transparent 75%, #8d6e63 75%),
+                linear-gradient(45deg, #8d6e63 25%, #5d4037 25%, #5d4037 75%, #8d6e63 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateX(20px);
+            animation: fadeLeftIn 0.8s ease-out 0.5s forwards;
+        }
+
+        @keyframes fadeLeftIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .about-image .pixel-art {
+            width: 80%;
+            height: 80%;
+            background: 
+                linear-gradient(45deg, #4caf50 25%, transparent 25%, transparent 75%, #4caf50 75%),
+                linear-gradient(45deg, #4caf50 25%, #388e3c 25%, #388e3c 75%, #4caf50 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            position: relative;
+        }
+
+        /* 管理团队 - 全新设计 */
+        .team-section {
+            background-color: rgba(40, 40, 40, 0.9);
+            padding: 100px 20px 60px;
+            text-align: center;
+            position: relative;
+        }
+
+        .team-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .team-member {
+            background: 
+                linear-gradient(45deg, #5d4037 25%, transparent 25%, transparent 75%, #5d4037 75%),
+                linear-gradient(45deg, #5d4037 25%, #4e342e 25%, #4e342e 75%, #5d4037 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            border: 6px solid #4e342e;
+            border-radius: 8px;
+            padding: 25px;
+            width: 280px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transform: translateY(30px);
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out forwards;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            transition: all 0.4s ease;
+        }
+
+        .team-member:nth-child(1) { animation-delay: 0.3s; }
+        .team-member:nth-child(2) { animation-delay: 0.6s; }
+        .team-member:nth-child(3) { animation-delay: 0.9s; }
+
+        .team-member:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            border-color: var(--mc-gold);
+        }
+
+        .team-member::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: 
+                linear-gradient(45deg, var(--mc-gold) 25%, transparent 25%, transparent 75%, var(--mc-gold) 75%),
+                linear-gradient(45deg, var(--mc-gold) 25%, transparent 25%, transparent 75%, var(--mc-gold) 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .team-member .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--mc-brown);
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 5px solid var(--mc-green);
+            font-size: 50px;
+            color: white;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 0 3px #3e2723;
+        }
+
+        .team-member:hover .avatar {
+            transform: scale(1.1);
+            border-color: var(--mc-gold);
+            box-shadow: 0 0 20px rgba(249, 194, 43, 0.5);
+        }
+
+        .team-member .avatar::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(45deg, rgba(0,0,0,0.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.1) 75%),
+                linear-gradient(45deg, rgba(0,0,0,0.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.1) 75%);
+            background-size: 10px 10px;
+            background-position: 0 0, 5px 5px;
+            pointer-events: none;
+        }
+
+        .team-member h3 {
+            color: var(--mc-green);
+            margin-bottom: 10px;
+            font-size: 20px;
+            text-shadow: 1px 1px 0 #000;
+        }
+
+        .team-member .role {
+            color: var(--mc-gold);
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: block;
+            text-shadow: 1px 1px 0 #000;
+            font-size: 18px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .team-member .role::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 2px;
+            background: var(--mc-gold);
+            margin: 8px auto;
+        }
+
+        .team-member .responsibilities {
+            background: rgba(0,0,0,0.2);
+            border-radius: 5px;
+            padding: 12px;
+            margin-top: 10px;
+            border-left: 3px solid var(--mc-green);
+        }
+
+        .team-member .responsibilities p {
+            margin: 8px 0;
+            font-size: 14px;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .team-member .responsibilities p::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--mc-green);
+        }
+
+        /* 加入区域 - 使用Noto Sans字体 */
+        .join-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9)), 
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><rect width="800" height="600" fill="%233e57a8"/><rect x="100" y="100" width="200" height="200" fill="%233a5c3a" stroke="%23222" stroke-width="10"/><rect x="150" y="150" width="100" height="100" fill="%238d6e63" stroke="%23222" stroke-width="10"/><rect x="500" y="150" width="200" height="300" fill="%238d6e63" stroke="%23222" stroke-width="10"/><rect x="550" y="200" width="100" height="50" fill="%235d4037" stroke="%23222" stroke-width="5"/></svg>');
+            background-size: cover;
+            background-attachment: fixed;
+            text-align: center;
+            position: relative;
+        }
+
+        .join-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            background: rgba(30, 30, 30, 0.85);
+            border-radius: 10px;
+            border: 3px solid var(--mc-green);
+            position: relative;
+            overflow: hidden;
+            transform: scale(0.9);
+            opacity: 0;
+            animation: scaleInFade 0.8s ease-out 0.5s forwards;
+        }
+
+        @keyframes scaleInFade {
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .join-content::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: 
+                linear-gradient(45deg, var(--mc-green) 25%, transparent 25%, transparent 75%, var(--mc-green) 75%),
+                linear-gradient(45deg, var(--mc-green) 25%, transparent 25%, transparent 75%, var(--mc-green) 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .join-steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .step {
+            background: rgba(76, 175, 80, 0.1);
+            border: 2px solid var(--mc-green);
+            border-radius: 8px;
+            padding: 20px;
+            width: 220px;
+            font-size: 14px;
+            position: relative;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeUp 0.6s ease-out forwards;
+            transition: all 0.3s;
+        }
+
+        .step:nth-child(1) { animation-delay: 0.7s; }
+        .step:nth-child(2) { animation-delay: 0.9s; }
+        .step:nth-child(3) { animation-delay: 1.1s; }
+
+        .step:hover {
+            background: rgba(76, 175, 80, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: var(--mc-green);
+            border-radius: 50%;
+            line-height: 40px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 0 #000;
+            font-size: 18px;
+            border: 2px solid var(--mc-dark-green);
+        }
+        
+        .step a {
+            color: #4caf50;
+            text-decoration: none;
+            border-bottom: 1px dashed #4caf50;
+            transition: all 0.3s;
+        }
+        
+        .step a:hover {
+            color: #fff;
+            border-bottom: 1px solid #fff;
+        }
+        
+        /* 底部地板效果 */
+        .floor-effect {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background: 
+                linear-gradient(45deg, var(--mc-grass) 25%, transparent 25%, transparent 75%, var(--mc-grass) 75%),
+                linear-gradient(45deg, var(--mc-grass) 25%, var(--mc-dark-green) 25%, var(--mc-dark-green) 75%, var(--mc-grass) 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            z-index: 1;
+            transform: translateY(100%);
+            animation: floorRise 1s ease-out 1.5s forwards;
+        }
+        
+        @keyframes floorRise {
+            to { transform: translateY(0); }
+        }
+        
+        .bouncing-blocks {
+            position: absolute;
+            bottom: 50px;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            z-index: 2;
+        }
+        
+        .bounce-block {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: 
+                linear-gradient(45deg, var(--mc-diamond) 25%, transparent 25%, transparent 75%, var(--mc-diamond) 75%),
+                linear-gradient(45deg, var(--mc-diamond) 25%, #2a6ebd 25%, #2a6ebd 75%, var(--mc-diamond) 75%);
+            background-size: 10px 10px;
+            background-position: 0 0, 5px 5px;
+            opacity: 0;
+            animation: bounce 1.5s ease-in-out forwards;
+        }
+        
+        @keyframes bounce {
+            0% { transform: translateY(-100vh); opacity: 1; }
+            60% { transform: translateY(20px); }
+            75% { transform: translateY(-10px); }
+            90% { transform: translateY(5px); }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        /* 页脚 */
+        footer {
+            background: rgba(20, 20, 20, 0.95);
+            padding: 50px 20px 20px;
+            border-top: 4px solid var(--mc-brown);
+            position: relative;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            gap: 40px;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            font-size: 14px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.8s ease-out forwards;
+        }
+
+        .footer-section:nth-child(1) { animation-delay: 0.3s; }
+        .footer-section:nth-child(2) { animation-delay: 0.5s; }
+        .footer-section:nth-child(3) { animation-delay: 0.7s; }
+
+        .footer-section h3 {
+            color: var(--mc-green);
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+        }
+
+        .footer-section p, .footer-section a {
+            color: #b0b0b0;
+            margin-bottom: 10px;
+            display: block;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--mc-green);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--mc-light);
+            font-size: 1.4rem;
+            transition: all 0.3s;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeUp 0.5s ease-out forwards;
+        }
+
+        .social-icons a:nth-child(1) { animation-delay: 0.8s; }
+        .social-icons a:nth-child(2) { animation-delay: 0.9s; }
+        .social-icons a:nth-child(3) { animation-delay: 1.0s; }
+        .social-icons a:nth-child(4) { animation-delay: 1.1s; }
+
+        .social-icons a:hover {
+            background: var(--mc-green);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #777;
+            font-size: 12px;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 1.2s forwards;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+            }
+            
+            nav ul {
+                margin-top: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .about-content {
+                flex-direction: column;
+            }
+            
+            .team-member {
+                width: 100%;
+            }
+            
+            .join-steps {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            /* 移动端调整灯和拉杆 */
+            .ceiling-lamp {
+                top: -50px;
+                width: 100px;
+                height: 100px;
+            }
+            
+            .lamp-rope {
+                height: 70px;
+            }
+            
+            .minecraft-lamp {
+                top: 80px;
+                width: 25px;
+                height: 25px;
+            }
+            
+            .minecraft-lever {
+                top: -15px;
+                height: 30px;
+            }
+        }
+        
+        /* 浮动方块动画 */
+        .floating-block {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: 
+                linear-gradient(45deg, var(--mc-green) 25%, transparent 25%, transparent 75%, var(--mc-green) 75%),
+                linear-gradient(45deg, var(--mc-green) 25%, var(--mc-dark-green) 25%, var(--mc-dark-green) 75%, var(--mc-green) 75%);
+            background-size: 10px 10px;
+            background-position: 0 0, 5px 5px;
+            animation: float 6s infinite ease-in-out;
+            z-index: 1;
+            opacity: 0;
+            animation: float 6s infinite ease-in-out, fadeIn 1s ease-in forwards;
+        }
+        
+        .floating-block.diamond {
+            background: 
+                linear-gradient(45deg, #3e9eff 25%, transparent 25%, transparent 75%, #3e9eff 75%),
+                linear-gradient(45deg, #3e9eff 25%, #2a6ebd 25%, #2a6ebd 75%, #3e9eff 75%);
+            background-size: 10px 10px;
+            background-position: 0 0, 5px 5px;
+        }
+        
+        .floating-block.gold {
+            background: 
+                linear-gradient(45deg, #f9c22b 25%, transparent 25%, transparent 75%, #f9c22b 75%),
+                linear-gradient(45deg, #f9c22b 25%, #d4a017 25%, #d4a017 75%, #f9c22b 75%);
+            background-size: 10px 10px;
+            background-position: 0 0, 5px 5px;
+        }
+        
+        .floating-block.stone {
+            background: 
+                linear-gradient(45deg, #8f8f8f 25%, transparent 25%, transparent 75%, #8f8f8f 75%),
+                linear-gradient(45deg, #8f8f8f 25%, #6f6f6f 25%, #6f6f6f 75%, #8f8f8f 75%);
+            background-size: 10px 10px;
+            background-position: 0 0, 5px 5px;
+        }
+        
+        .floating-block.netherrack {
+            background: 
+                linear-gradient(45deg, #704e3e 25%, transparent 25%, transparent 75%, #704e3e 75%),
+                linear-gradient(45deg, #704e3e 25%, #5d4037 25%, #5d4037 75%, #704e3e 75%);
+            background-size: 10px 10px;
+            background-position: 0 0, 5px 5px;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        
+        /* 区块加载动画 */
+        .chunk-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1a1a1a;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            animation: fadeOut 1s ease-out 1.5s forwards;
+        }
+        
+        @keyframes fadeOut {
+            to { opacity: 0; visibility: hidden; }
+        }
+        
+        .chunk-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 4px;
+            width: 320px;
+            height: 320px;
+        }
+        
+        .chunk-cell {
+            background: #333;
+            border: 1px solid #222;
+            animation: chunkLoad 1.5s infinite;
+        }
+        
+        @keyframes chunkLoad {
+            0% { background: #333; }
+            50% { background: #4a7c4a; }
+            100% { background: #333; }
+        }
+        
+        .chunk-loader h2 {
+            margin-top: 30px;
+            color: var(--mc-green);
+            font-size: 1.8rem;
+        }
+        
+        /* 加入区域文本字体 */
+        .join-content > p {
+            font-family: 'Noto Sans', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            color: #e0e0e0;
+            text-shadow: 1px 1px 0 #000;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 区块加载动画 -->
+    <div class="chunk-loader" id="chunk-loader">
+        <div class="chunk-grid">
+            <div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div>
+            <div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div>
+            <div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div>
+            <div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div>
+            <div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div>
+            <div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div>
+            <div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div>
+            <div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div><div class="chunk-cell"></div>
+        </div>
+        <h2>Loading Aminoac Town...</h2>
+    </div>
+
+    <!-- 浮动方块 -->
+    <div class="floating-block" style="top: 10%; left: 5%;"></div>
+    <div class="floating-block diamond" style="top: 20%; left: 90%;"></div>
+    <div class="floating-block gold" style="top: 50%; left: 15%;"></div>
+    <div class="floating-block stone" style="top: 30%; left: 20%;"></div>
+    <div class="floating-block netherrack" style="top: 70%; left: 85%;"></div>
+    <div class="floating-block" style="top: 85%; left: 10%;"></div>
+    <div class="floating-block diamond" style="top: 15%; left: 75%;"></div>
+    <div class="floating-block gold" style="top: 65%; left: 70%;"></div>
+
+    <!-- 头部导航 -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <div class="creeper-face">
+                    <div class="mouth"></div>
+                </div>
+                <div class="logo-text">
+                    AMINOAC TOWN
+                    <span>Newnan Town Server</span>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About Town</a></li>
+                    <li><a href="#team">Team</a></li>
+                    <li><a href="#join">Join Us</a></li>
+                    <li>
+                        <div class="lang-switcher">
+                            <div class="lang-btn active" data-lang="en">EN</div>
+                            <div class="lang-btn" data-lang="zh">中文</div>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 英雄区域 -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Welcome to Aminoac Town <span class="item-icon steve-icon"></span></h1>
+            <div class="mc-grass-block"></div>
+            <p>The most vibrant community town in the Newnan Town Server</p>
+            <div class="hero-buttons">
+                <a href="#join" class="mc-button">Join Now</a>
+                <a href="#about" class="mc-button brown">Explore Town</a>
+                <a href="#team" class="mc-button gold">Our Team</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于小镇 -->
+    <section class="section" id="about">
+        <h2 class="section-title">About Aminoac Town <span class="block-icon item-icon creeper-icon"></span></h2>
+        <div class="about-content">
+            <div class="about-text">
+                <p>Aminoac Town is one of the oldest and most vibrant communities in the Newnan Town Server. Founded in 2020, we have grown over the years to become one of the most prosperous towns on the server.</p>
+                <p>Located at the picturesque junction of forests and mountains, our town boasts unique natural scenery and well-developed infrastructure. We focus on community building and encourage residents to help each other, creating a wonderful gaming experience together.</p>
+                <p>The town features medieval-style architecture, modern agricultural zones, automated redstone farms, an impressive underground transportation network, and a bustling commercial center. Whether you're a building enthusiast, a redstone engineer, or an explorer, there's a place for you here.</p>
+                <p>We regularly organize community events such as building competitions, treasure hunts, and holiday celebrations, ensuring every resident feels the warmth and joy of our community.</p>
+            </div>
+            <div class="about-image">
+                <div class="pixel-art"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 管理团队 -->
+    <section class="team-section" id="team">
+        <!-- 老式吊灯 -->
+        <div class="ceiling-lamp" id="ceiling-lamp">
+            <div class="ceiling-hook"></div>
+            <div class="lamp-rope" id="lamp-rope"></div>
+            <div class="minecraft-lamp" id="team-lamp"></div>
+        </div>
+        
+        <h2 class="section-title">
+            Our Team 
+            <span class="block-icon item-icon sword-icon"></span>
+            <!-- 添加拉杆 -->
+            <div class="minecraft-lever" id="team-lever"></div>
+        </h2>
+        <div class="team-container">
+            <div class="team-member">
+                <div class="avatar">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <h3>Hakimi_Feshe</h3>
+                <span class="role">Mayor</span>
+                <div class="responsibilities">
+                    <p>Overall town planning & development</p>
+                    <p>Resident relations coordination</p>
+                    <p>Event organization</p>
+                </div>
+            </div>
+            <div class="team-member">
+                <div class="avatar">
+                    <i class="fas fa-chess-queen"></i>
+                </div>
+                <h3>LowerNine752803</h3>
+                <span class="role">Deputy Mayor</span>
+                <div class="responsibilities">
+                    <p>Assists mayor in management</p>
+                    <p>Infrastructure development</p>
+                    <p>New resident orientation</p>
+                </div>
+            </div>
+            <div class="team-member">
+                <div class="avatar">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+                <h3>Susu</h3>
+                <span class="role">Propaganda Minister</span>
+                <div class="responsibilities">
+                    <p>Town promotion & outreach</p>
+                    <p>Social media management</p>
+                    <p>Event documentation</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 加入小镇 -->
+    <section class="join-section" id="join">
+        <div class="floor-effect"></div>
+        <div class="bouncing-blocks"></div>
+        <h2 class="section-title">Join Us <span class="block-icon item-icon cow-icon"></span></h2>
+        <div class="join-content pixel-border">
+            <p>Become a member of Aminoac Town and build this beautiful home with us!</p>
+            <p>Whether you're a beginner or a veteran player, as long as you follow server rules and respect other players, you're welcome to join us!</p>
+            
+            <div class="join-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Visit Website</h3>
+                    <p>Learn server information</p>
+                    <p><a href="https://www.newnan.city/" target="_blank">www.newnan.city</a></p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Join QQ Group</h3>
+                    <p>Connect with town residents</p>
+                    <p>Group ID: 702772042</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Apply for Residence</h3>
+                    <p>Contact Mayor or Admins</p>
+                    <p>/mail send Mayor Application to join town</p>
+                </div>
+            </div>
+            
+            <a href="#" class="mc-button creeper">View Full Guide</a>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Aminoac Town</h3>
+                <p>Aminoac Town is one of the oldest and most vibrant communities in the Newnan Town Server, dedicated to providing players with the best gaming experience and community atmosphere.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="#home">Home</a>
+                <a href="#about">About Town</a>
+                <a href="#team">Our Team</a>
+                <a href="#join">Join Us</a>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Mayor: Hakimi_Feshe</p>
+                <p>Deputy Mayor: LowerNine752803</p>
+                <p>Propaganda Minister: Susu</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-discord"></i></a>
+                    <a href="#"><i class="fab fa-qq"></i></a>
+                    <a href="#"><i class="fab fa-weixin"></i></a>
+                    <a href="#"><i class="fab fa-bilibili"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 Aminoac Town, Newnan Town Server. All rights reserved.</p>
+            <p>This website is for Minecraft player community entertainment only and is not affiliated with Mojang Studios</p>
+        </div>
+    </footer>
+
+    <script>
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // 滚动效果
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.backgroundColor = 'rgba(20, 20, 20, 0.98)';
+                header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.5)';
+            } else {
+                header.style.backgroundColor = 'rgba(33, 33, 33, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+        });
+
+        // 苦力怕动画效果
+        const creeper = document.querySelector('.creeper-face');
+        setInterval(() => {
+            creeper.style.transform = 'scale(1.05)';
+            setTimeout(() => {
+                creeper.style.transform = 'scale(1)';
+            }, 200);
+        }, 5000);
+        
+        // 模拟玩家加入效果
+        const joinButtons = document.querySelectorAll('.mc-button');
+        joinButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                this.innerHTML = 'Joining...';
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fas fa-check"></i> Application Sent';
+                    this.style.backgroundColor = '#388e3c';
+                }, 1000);
+            });
+        });
+        
+        // 语言切换功能
+        const langButtons = document.querySelectorAll('.lang-btn');
+        langButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const lang = this.getAttribute('data-lang');
+                langButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // 在实际应用中，这里应该切换整个页面的文本内容
+                // 这里仅做演示效果
+                if(lang === 'zh') {
+                    document.querySelector('.hero h1').innerHTML = '欢迎来到氨基酸镇 <span class="item-icon steve-icon"></span>';
+                    document.querySelector('.hero p').textContent = '纽南镇服务器中最具活力的社区城镇';
+                    document.querySelector('.section-title').innerHTML = '关于氨基酸镇 <span class="block-icon item-icon creeper-icon"></span>';
+                    document.querySelector('.join-section .section-title').innerHTML = '加入我们 <span class="block-icon item-icon cow-icon"></span>';
+                } else {
+                    document.querySelector('.hero h1').innerHTML = 'Welcome to Aminoac Town <span class="item-icon steve-icon"></span>';
+                    document.querySelector('.hero p').textContent = 'The most vibrant community town in the Newnan Town Server';
+                    document.querySelector('.section-title').innerHTML = 'About Aminoac Town <span class="block-icon item-icon creeper-icon"></span>';
+                    document.querySelector('.join-section .section-title').innerHTML = 'Join Us <span class="block-icon item-icon cow-icon"></span>';
+                }
+            });
+        });
+        
+        // 方块弹跳动画
+        function createBouncingBlocks() {
+            const container = document.querySelector('.bouncing-blocks');
+            const positions = [10, 25, 40, 60, 80];
+            
+            positions.forEach(pos => {
+                const block = document.createElement('div');
+                block.className = 'bounce-block';
+                block.style.left = `${pos}%`;
+                block.style.animationDelay = `${Math.random() * 0.5}s`;
+                container.appendChild(block);
+            });
+        }
+        
+        // 灯和拉杆互动
+        const teamLever = document.getElementById('team-lever');
+        const teamLamp = document.getElementById('team-lamp');
+        
+        teamLever.addEventListener('click', function() {
+            this.classList.toggle('active');
+            teamLamp.classList.toggle('on');
+            
+            // 添加音效
+            const clickSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-light-switch-click-1130.mp3');
+            clickSound.play();
+        });
+        
+        // 吊灯拖动效果
+        const lampRope = document.getElementById('lamp-rope');
+        let isDragging = false;
+        let startX, startY;
+        let ropeAngle = 0;
+        
+        lampRope.addEventListener('mousedown', function(e) {
+            isDragging = true;
+            this.classList.add('grabbing');
+            startX = e.clientX;
+            startY = e.clientY;
+            document.body.style.cursor = 'grabbing';
+        });
+        
+        document.addEventListener('mousemove', function(e) {
+            if (!isDragging) return;
+            
+            const deltaX = e.clientX - startX;
+            const deltaY = e.clientY - startY;
+            
+            // 计算角度（限制在 -45 到 45 度之间）
+            ropeAngle = Math.max(-45, Math.min(45, deltaX / 5));
+            
+            lampRope.style.transform = `translateX(-50%) rotate(${ropeAngle}deg)`;
+        });
+        
+        document.addEventListener('mouseup', function() {
+            if (isDragging) {
+                isDragging = false;
+                lampRope.classList.remove('grabbing');
+                document.body.style.cursor = 'default';
+                
+                // 添加摆动效果
+                swingLamp();
+            }
+        });
+        
+        function swingLamp() {
+            const amplitude = 15;
+            const duration = 2000;
+            const startTime = Date.now();
+            
+            function animate() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                if (progress < 1) {
+                    // 使用正弦函数创建摆动效果
+                    const angle = ropeAngle * Math.cos(progress * Math.PI * 4) * Math.pow(0.5, progress * 4);
+                    lampRope.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+                    requestAnimationFrame(animate);
+                } else {
+                    lampRope.style.transform = `translateX(-50%) rotate(0deg)`;
+                }
+            }
+            
+            requestAnimationFrame(animate);
+        }
+        
+        // 页面加载效果
+        window.addEventListener('load', function() {
+            // 创建弹跳方块
+            createBouncingBlocks();
+            
+            // 浮动方块动画
+            const blocks = document.querySelectorAll('.floating-block');
+            blocks.forEach((block, index) => {
+                block.style.animationDelay = (index * 0.5) + 's';
+            });
+        });
+    </script>
+</body>
+</html>
